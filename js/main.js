@@ -55,6 +55,7 @@ function init () {
 	setupOptions()
 
 	Telegram.WebApp.ready()
+	Telegram.WebApp.sendData("hi")
 	Telegram.WebApp.MainButton
 		.setText('Ok')
 		.onClick(sendDateTime)
