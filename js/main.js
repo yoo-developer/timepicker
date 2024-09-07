@@ -22,17 +22,14 @@ const setDefaultValues = (pickers) => {
 }
 setDefaultValues(pickers);
 
-// Handlers for showing the main button once both date and time are set
-pickers.date.addEventListener('change', pickHandler);
-pickers.time.addEventListener('change', pickHandler);
-
-function pickHandler(e) {
-	if (pickers.date.value !== '' && pickers.time.value !== '' && pickers.amount.value !== '') {
-		Telegram.WebApp.MainButton.show(); // Show the button only if amount is filled too
+// Show main button only after amount is entered
+pickers.amount.addEventListener('input', function () {
+	if (pickers.amount.value !== '') {
+		Telegram.WebApp.MainButton.show();
 	} else {
-		Telegram.WebApp.MainButton.hide(); // Hide if incomplete
+		Telegram.WebApp.MainButton.hide();
 	}
-}
+});
 
 async function sendData() {
 	if (pickers.amount.value === '') {
@@ -40,14 +37,22 @@ async function sendData() {
 		return;
 	}
 
-	// Manually parse the date and time
+	// Parse the date
 	let dateParts = pickers.date.value.split("-");
-	let timeParts = pickers.time.value.split(":");
+	let timeParts = pickers.time.value !== '' ? pickers.time.value.split(":") : null; // Optional time check
 
-	// Create a new Date object but explicitly set the hours and minutes from the picker
+	// Create a new Date object for the date
 	let timestamp = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-	timestamp.setHours(parseInt(timeParts[0]));
-	timestamp.setMinutes(parseInt(timeParts[1]));
+
+	// If the time was not changed, keep it as the current time, otherwise set the picked time
+	if (timeParts) {
+		timestamp.setHours(parseInt(timeParts[0]));
+		timestamp.setMinutes(parseInt(timeParts[1]));
+	} else {
+		const current = new Date();
+		timestamp.setHours(current.getHours());
+		timestamp.setMinutes(current.getMinutes());
+	}
 
 	let amount = parseInt(pickers.amount.value);
 	if (isNaN(amount) || amount <= 0) {
