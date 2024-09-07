@@ -47,7 +47,7 @@ async function sendDateTime () {
 
 	var data = timestamp.getTime()+'_'+timestamp.getTimezoneOffset()
 	const e = await Telegram.WebApp.sendData(data)
-	alert(e)
+	alert(data)
 
 }
 
