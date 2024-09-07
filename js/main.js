@@ -47,8 +47,7 @@ async function sendData () {
 	var amount = parseInt(pickers.amount.value) 
 	timestamp.setHours(h || 0, m || 0)
 	var data = {timestamp :timestamp.getTime(),amount}
-	const e = await Telegram.WebApp.sendData(JSON.stringify(data))
-	alert(data)
+	await Telegram.WebApp.sendData(JSON.stringify(data))
 
 }
 
