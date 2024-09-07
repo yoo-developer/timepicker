@@ -38,6 +38,7 @@ function pickHandler (e) {
 }
 
 function sendDateTime () {
+	alert("hi")
 	var timestamp = pickers.date.value
 		? new Date(pickers.date.value)
 		: new Date()
