@@ -37,8 +37,7 @@ function pickHandler (e) {
 	Telegram.WebApp.MainButton.show()
 }
 
-function sendDateTime () {
-	alert("hi")
+async function sendDateTime () {
 	var timestamp = pickers.date.value
 		? new Date(pickers.date.value)
 		: new Date()
@@ -47,7 +46,9 @@ function sendDateTime () {
 	timestamp.setHours(h || 0, m || 0)
 
 	var data = timestamp.getTime()+'_'+timestamp.getTimezoneOffset()
-	Telegram.WebApp.sendData(data)
+	const e = await Telegram.WebApp.sendData(data)
+	alert(e)
+
 }
 
 function init () {
