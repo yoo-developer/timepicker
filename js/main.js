@@ -1,6 +1,7 @@
 var pickers = {
 	date: document.querySelector('input[type="date"]'),
 	time: document.querySelector('input[type="time"]'),
+	amount : document.querySelector('input[type="number"]'),
 	text: document.querySelector('#text')
 }
 
@@ -13,7 +14,7 @@ const setDefaultValues = (pickers) => {
 		.join("-");
 
 	pickers.date.value = date;
-
+	
 	const time = [ current.getHours(), current.getMinutes() ]
 		.map(item => item.toString().padStart(2, "0"))
 		.join(":");
@@ -37,16 +38,16 @@ function pickHandler (e) {
 	Telegram.WebApp.MainButton.show()
 }
 
-async function sendDateTime () {
+async function sendData () {
 	var timestamp = pickers.date.value
 		? new Date(pickers.date.value)
 		: new Date()
 
 	var [ h, m ] = pickers.time.value.split(':')
+	var amount = parseInt(pickers.amount.value) 
 	timestamp.setHours(h || 0, m || 0)
-
-	var data = timestamp.getTime()+'_'+timestamp.getTimezoneOffset()
-	const e = await Telegram.WebApp.sendData(data)
+	var data = {timestamp :timestamp.getTime(),amount}
+	const e = await Telegram.WebApp.sendData(JSON.stringify(data))
 	alert(data)
 
 }
